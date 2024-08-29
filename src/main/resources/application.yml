@@ -1,0 +1,71 @@
+server:
+  port: 8088
+spring:
+  task:
+    scheduling:
+      pool:
+        size: 10
+      thread-name-prefix: Scheduled-
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      auto-commit: true
+      connection-test-query: SELECT 1
+      connection-timeout: 30000
+      idle-timeout: 30000
+      max-lifetime: 1800000
+      maximum-pool-size: 50
+      minimum-idle: 5
+      pool-name: HikariPool
+    password: 123456
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:mysql://localhost:3306/MomentumX?createDatabaseIfNotExist=true&autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=GMT%2b8
+    username: root
+
+mybatis-plus:
+  configuration:
+    cache-enabled: true
+    default-executor-type: reuse
+    default-statement-timeout: 25000
+    lazy-loading-enabled: true
+    multiple-result-sets-enabled: true
+    use-column-label: true
+  mapper-locations: classpath:/mapper/*Mapper.xml
+
+emSecSecurityServerUrl: http://127.0.0.1:18888/api/verifyUserInfo?
+ocr:
+  service: chaojiyingOcrService
+  third:
+    aliyun:
+      appcode: ''
+      chaojiying:
+        pass: ''
+        softid: 0
+        user: ''
+plank:
+  # 是否开启自动交易->自动止盈止损
+  automaticTrading: false
+  # 自动交易单笔交易金额上限
+  singleTransactionLimitAmount: 20000
+  automaticTradingMoneyLimitUp: 100000
+  # 是否开启持仓监控
+  enableMonitor: false
+  # 日志打印股票的name或者code
+  printName: true
+  recentDayNumber: 1
+  xueQiuCookie: bid=9ea105651fb1563867b3225ba28c0f26_low6qzst; device_id=d890036fb8c024570632d9044c508882; s=cb11wtkaby; cookiesu=481724893782118; Hm_lvt_1db88642e346389874251b5a1eded6e3=1722580582,1724893784; HMACCOUNT=7CDB158CCA07A9A9; xq_a_token=0d9f2033f0e83f02d70a1cbd0ed156d994a6d7bc; xqat=0d9f2033f0e83f02d70a1cbd0ed156d994a6d7bc; xq_r_token=5fd34fa686e2addc5f0567c92de6bc5fdd2aed3a; xq_id_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1aWQiOjU3MzM3MDcyNjEsImlzcyI6InVjIiwiZXhwIjoxNzI3NDQ0OTQwLCJjdG0iOjE3MjQ4OTM4MDUyMzIsImNpZCI6ImQ5ZDBuNEFadXAifQ.GSD_nrYTTFI4ZjYAe_eLWuoGnHwUJgDYzPg3eg8ad5Z_vIH_40rf-BBPrhOCRoeNNiCiN1eDD8cKOs18ISFkBcMRlRYwc1bu7f5RpRIJumkycrx2oFkc5-ynJA7PB6H_SaTce6YuwcbJaZ-jq23r8fpekaRT7XPvhMr9ZY4W82gfo6KJtKUPxbQsSJEdj7WQz0ViGemR8NkAJ-5XtMBAuAL0mro135-pf3SQOklsP5APDrtJj8oBroiQ06dkpUPvmgp2j6QCT81FOnrRs6h5jfHwzzJHNkZilKD3DUH4eoApvEPaBw59-bHxAgxjuNoTqMZ5fiLVctAN7zXNONRs2w; xq_is_login=1; u=5733707261; is_overseas=0; ssxmod_itna=eqIxyD97dDqGq4BPiKGdjSQtQTD=tDgiBQe4Wue29KDsqvrDSxGKidDqxBWm=YqPKTt2BnEFeHO84wHN8Ue32FqkxnTeD=xYQDwxYoDUxGtDpxG6Y7xemtD5xGoDPxDeDAY9lODjiX1lSRfj29SQSDifR4qDR3qDgzeD1AdNnjMiDbhtDi4D+Au=5y4DBAxGnS4GgAqx47ANDf3jW56jUQPDuQ6jPEqDLzQaTxB600jPyKz7DtMjRAQjUfBU3NqT3lG3jD845AAP4t7YNlGhiDReK7DhbStmGIGEtt2h7KY4n25DAD41xD==; ssxmod_itna2=eqIxyD97dDqGq4BPiKGdjSQtQTD=tDgiBQe4Wue2KikjQDl24QFQ08D+2YD=; Hm_lpvt_1db88642e346389874251b5a1eded6e3=1724893821
+  mainFundUrl: https://push2.eastmoney.com/api/qt/clist/get?fid=f62&po=1&pz=6000&pn=1&np=1&fltt=2&invt=2&ut=b2884a393a59ad64002292a3e90d46a5&fs=m:0+t:6+f:!2,m:0+t:13+f:!2,m:0+t:80+f:!2,m:1+t:2+f:!2,m:1+t:23+f:!2&fields=f12,f14,f3,f62,f184,f267,f127,f268,f164,f109,f165,f174,f160,f175
+  industryBKUrl: https://push2.eastmoney.com/api/qt/clist/get?cb=jQuery112306145005741278797_1676863228205&fid=f3&po=1&pz=100&pn=1&np=1&fltt=2&invt=2&ut=b2884a393a59ad64002292a3e90d46a5&fs=m%3A90+t%3A2&fields=f12%2Cf14%2Cf2%2Cf3%2Cf62%2Cf184%2Cf66%2Cf69%2Cf72%2Cf75%2Cf78%2Cf81%2Cf84%2Cf87%2Cf204%2Cf205%2Cf124%2Cf1%2Cf13
+  conceptBKUrl: https://push2.eastmoney.com/api/qt/clist/get?cb=jQuery112306145005741278797_1676863228203&fid=f3&po=1&pz=100&pn=1&np=1&fltt=2&invt=2&ut=b2884a393a59ad64002292a3e90d46a5&fs=m%3A90+t%3A3&fields=f12%2Cf14%2Cf2%2Cf3%2Cf62%2Cf184%2Cf66%2Cf69%2Cf72%2Cf75%2Cf78%2Cf81%2Cf84%2Cf87%2Cf204%2Cf205%2Cf124%2Cf1%2Cf13
+  updateStockBkUrl: https://push2.eastmoney.com/api/qt/clist/get?cb=jQuery112309053343085134742_1676868400492&fid=f62&po=1&pz=100&pn=1&np=1&fltt=2&invt=2&ut=b2884a393a59ad64002292a3e90d46a5&fs=b%3A{BK}&fields=f12%2Cf14%2Cf2%2Cf3%2Cf62%2Cf184%2Cf66%2Cf69%2Cf72%2Cf75%2Cf78%2Cf81%2Cf84%2Cf87%2Cf204%2Cf205%2Cf124%2Cf1%2Cf13
+  todayFundTrendUrl: http://stock.xueqiu.com/v5/stock/capital/flow.json?symbol={code}
+  xueQiuStockDetailUrl: http://stock.xueqiu.com/v5/stock/chart/kline.json?symbol={code}&begin={time}&period=day&type=before&count=-{recentDayNumber}&indicator=kline,pe,pb,ps,pcf,market_capital,agt,ggt,balance
+  foreignShareholdingUrl: https://datacenter-web.eastmoney.com/api/data/v1/get?callback=jQuery112304010956559881589_1675054117441&sortColumns=HOLD_MARKET_CAP&sortTypes=-1&pageSize=500&pageNumber=1&reportName=RPT_MUTUAL_STOCK_NORTHSTA&columns=ALL&source=WEB&client=WEB&filter=(TRADE_DATE%3D%272023-01-20%27)(INTERVAL_TYPE%3D%223%22)
+  xueQiuStockLimitUpPriceUrl: https://stock.xueqiu.com/v5/stock/quote.json?symbol={code}&extend=detail
+  panKouUrl: https://stock.xueqiu.com/v5/stock/realtime/pankou.json?symbol={code}
+  updateAllStockUrl: https://xueqiu.com/service/screener/screen?category=CN&exchange=sz_sh&areacode=&indcode=&order_by=symbol&order=desc&page={page}&size=30&only_count=0&current=&pct=&mc=&volume=&_=1690013194704
+
+logging:
+  file:
+    path: logs
+    name: ./logs/plank.logs
