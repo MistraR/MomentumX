@@ -1,22 +1,24 @@
 package com.mistra.plank.service.impl;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import com.mistra.plank.common.util.HttpUtil;
+import com.mistra.plank.common.util.StockUtil;
 import com.mistra.plank.model.entity.DailyIndex;
 import com.mistra.plank.model.entity.StockInfo;
 import com.mistra.plank.service.DailyIndexParser;
 import com.mistra.plank.service.StockCrawlerService;
 import com.mistra.plank.service.StockInfoParser;
-import com.mistra.plank.common.util.HttpUtil;
-import com.mistra.plank.common.util.StockUtil;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 public class StockCrawlerServiceImpl implements StockCrawlerService {
 
@@ -58,9 +60,13 @@ public class StockCrawlerServiceImpl implements StockCrawlerService {
         String codes = codeList.stream().map(StockUtil::getFullCode).collect(Collectors.joining(","));
         HashMap<String, String> header = new HashMap<>();
         header.put("Referer", "https://finance.sina.com.cn/");
-        String content = HttpUtil.sendGet(httpClient, "https://hq.sinajs.cn/list=" + codes, header, "gbk");
-        if (content != null) {
-            return dailyIndexParser.parseDailyIndexList(content);
+        try {
+            String content = HttpUtil.sendGet(httpClient, "https://hq.sinajs.cn/list=" + codes, header, "gbk");
+            if (content != null) {
+                return dailyIndexParser.parseDailyIndexList(content);
+            }
+        } catch (Exception e) {
+            log.error("查询股票行情失败 {}", codes);
         }
         return Collections.emptyList();
     }
@@ -70,7 +76,6 @@ public class StockCrawlerServiceImpl implements StockCrawlerService {
         List<StockInfoParser.EmStock> list = getStockList("f2,f5,f6,f8,f12,f13,f15,f16,f17,f18");
         return list.stream().map(StockInfoParser.EmStock::getDailyIndex).collect(Collectors.toList());
     }
-
 
     @Override
     public List<DailyIndex> getHistoryDailyIndexs(String code) {

@@ -10,6 +10,7 @@ public enum AutomaticTradingEnum {
     /**
      * 自动交易策略
      */
+    T("T"),
     AUTO_PLANK("自动打板"),
     SUCK("低吸"),
     MANUAL("手动买入"),

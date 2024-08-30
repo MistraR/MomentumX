@@ -17,9 +17,11 @@ spring:
       maximum-pool-size: 50
       minimum-idle: 5
       pool-name: HikariPool
-    password: YQSaGPzeRRCvDx2mOHVMOw
+    #    password: YQSaGPzeRRCvDx2mOHVMOw
+    password: 123456
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mysql://101.132.113.82:3306/MomentumX?createDatabaseIfNotExist=true&autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=GMT%2b8
+    #    url: jdbc:mysql://101.132.113.82:3306/MomentumX?createDatabaseIfNotExist=true&autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=GMT%2b8
+    url: jdbc:mysql://localhost:3306/MomentumX?createDatabaseIfNotExist=true&autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=GMT%2b8
     username: root
 
 mybatis-plus:
@@ -43,11 +45,18 @@ ocr:
         softid: 0
         user: ''
 plank:
-  # 是否开启自动交易->自动止盈止损
+  # 是否开启自动交易
   automaticTrading: false
+  # 止损比率
+  stopLossRate: -10
+  # 止盈比率
+  takeProfitRate: 7
   # 自动交易单笔交易金额上限
-  singleTransactionLimitAmount: 20000
-  automaticTradingMoneyLimitUp: 100000
+  singleTransactionLimitAmount: 10000
+  # 单只股票交易买入金额上限
+  automaticTradingMoneyLimitUp: 50000
+  # 止盈金额
+  takeProfit: 5000
   # 是否开启持仓监控
   enableMonitor: false
   # 日志打印股票的name或者code

@@ -13,8 +13,6 @@ import lombok.NoArgsConstructor;
  * @ Time: 2021/11/18 22:09
  * @ Description: 配置文件
  * @ Copyright (c) Mistra,All Rights Reserved
- * @ Github: https://github.com/MistraR
- * @ CSDN: https://blog.csdn.net/axela30w
  */
 @Data
 @Builder
@@ -38,16 +36,6 @@ public class PlankConfig {
      * 雪球 获取某只股票当天实时价格,是否涨停等信息
      */
     private String xueQiuStockLimitUpPriceUrl;
-
-    /**
-     * 雪球 某只股票当日资金流入趋势接口 {code}=SZ300750
-     */
-    private String todayFundTrendUrl;
-
-    /**
-     * 东财 抓取主力流入，5、10、20天连续流入数据，当天实时流入数据
-     */
-    private String mainFundUrl;
 
     /**
      * 雪球 获取某只股票最近多少天的记录
@@ -75,6 +63,11 @@ public class PlankConfig {
     private Double takeProfitRate;
 
     /**
+     * 止盈金额
+     */
+    private Double takeProfit;
+
+    /**
      * 单只股票交易买入金额上限
      */
     private Double automaticTradingMoneyLimitUp;
@@ -90,28 +83,7 @@ public class PlankConfig {
     private Boolean enableMonitor;
 
     /**
-     * 当日行业版块涨幅排行 http://quote.eastmoney.com/center/hsbk.html
-     */
-    private String industryBKUrl;
-
-    /**
-     * 当日概念版块涨幅排行
-     */
-    private String conceptBKUrl;
-
-    /**
-     * 更新股票所属版块
-     */
-    private String updateStockBkUrl;
-
-    /**
      * 更新股票池
      */
     private String updateAllStockUrl;
-
-    /**
-     * 盘口数据  买单量 卖单量
-     */
-    private String panKouUrl;
-
 }

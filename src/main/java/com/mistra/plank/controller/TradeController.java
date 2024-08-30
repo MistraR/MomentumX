@@ -14,19 +14,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.mistra.plank.common.config.PlankConfig;
 import com.mistra.plank.common.exception.FieldInputException;
 import com.mistra.plank.common.util.StockUtil;
-import com.mistra.plank.dao.HoldSharesMapper;
+import com.mistra.plank.dao.MomentumDao;
 import com.mistra.plank.dao.StockMapper;
+import com.mistra.plank.dao.TradingRecordDao;
 import com.mistra.plank.job.StockProcessor;
 import com.mistra.plank.model.dto.StockRealTimePrice;
-import com.mistra.plank.model.entity.HoldShares;
+import com.mistra.plank.model.entity.Momentum;
 import com.mistra.plank.model.entity.Stock;
 import com.mistra.plank.model.entity.StockSelected;
 import com.mistra.plank.model.entity.TradeMethod;
 import com.mistra.plank.model.entity.TradeUser;
+import com.mistra.plank.model.entity.TradingRecord;
 import com.mistra.plank.model.enums.AutomaticTradingEnum;
 import com.mistra.plank.model.vo.AccountVo;
 import com.mistra.plank.model.vo.CommonResponse;
@@ -75,13 +75,13 @@ public class TradeController extends BaseController {
     private StockSelectedService stockSelectedService;
 
     @Autowired
-    private HoldSharesMapper holdSharesMapper;
+    private TradingRecordDao tradingRecordDao;
+
+    @Autowired
+    private MomentumDao momentumDao;
 
     @Autowired
     private StockMapper stockMapper;
-
-    @Autowired
-    private PlankConfig plankConfig;
 
     @Autowired
     private StockProcessor stockProcessor;
@@ -210,15 +210,10 @@ public class TradeController extends BaseController {
             message = response.getData().get(0).getWtbh();
             Stock stock = stockMapper.selectOne(new LambdaQueryWrapper<Stock>().eq(Stock::getName, stockName));
             if (Objects.nonNull(stock)) {
-                HoldShares holdShare = HoldShares.builder().buyTime(new Date()).clearance(false).code(stock.getCode())
-                        .name(stock.getName()).availableVolume(0).number(amount).profit(new BigDecimal(0))
-                        // 设置触发止损价
-                        .stopLossPrice(BigDecimal.valueOf(price * plankConfig.getStopLossRate()).setScale(2, RoundingMode.HALF_UP))
-                        // 设置触发止盈价
-                        .takeProfitPrice(BigDecimal.valueOf(price * plankConfig.getTakeProfitRate()).setScale(2, RoundingMode.HALF_UP))
-                        .automaticTradingType(AutomaticTradingEnum.MANUAL.name()).buyPrice(BigDecimal.valueOf(price))
-                        .highestProfitRatio(new BigDecimal(0)).build();
-                holdSharesMapper.insert(holdShare);
+                TradingRecord holdShare = TradingRecord.builder().buyTime(new Date()).clearance(false).code(stock.getCode())
+                        .name(stock.getName()).number(amount).profit(new BigDecimal(0))
+                        .automaticTradingType(AutomaticTradingEnum.MANUAL.name()).buyPrice(BigDecimal.valueOf(price)).build();
+                tradingRecordDao.insert(holdShare);
                 stock.setShareholding(true);
                 stock.setBuyTime(new Date());
                 stockMapper.updateById(stock);
@@ -229,12 +224,11 @@ public class TradeController extends BaseController {
 
     @RequestMapping("sale")
     public CommonResponse sale(int amount, double price, String stockCode, String stockName, Integer tradeUserId) {
-        HoldShares holdShare = holdSharesMapper.selectOne(new QueryWrapper<HoldShares>().eq("name", stockName)
-                .ge("available_volume", 0));
+        Momentum momentum = momentumDao.selectOne(new LambdaQueryWrapper<Momentum>().eq(Momentum::getName, stockName));
         log.info("手动卖出 {} {}股", stockName, amount);
         SubmitRequest request = new SubmitRequest(getTradeUserId(tradeUserId));
-        StockRealTimePrice stockRealTimePrice = stockProcessor.getStockRealTimePriceByCode(holdShare.getCode());
-        request.setAmount(Math.min(amount, holdShare.getAvailableVolume()));
+        StockRealTimePrice stockRealTimePrice = stockProcessor.getStockRealTimePriceByCode(momentum.getCode());
+        request.setAmount(Math.min(amount, momentum.getAvailableNumber()));
         request.setPrice(BigDecimal.valueOf(stockRealTimePrice.getCurrentPrice() * 0.985).setScale(2, RoundingMode.HALF_UP).doubleValue());
         request.setStockCode(stockCode);
         request.setZqmc(stockName);
@@ -244,12 +238,6 @@ public class TradeController extends BaseController {
         String message = response.getMessage();
         if (response.success()) {
             message = response.getData().get(0).getWtbh();
-            // WEB页面手动卖出的，同时更新掉数据库持仓表的数据
-            holdShare.setAvailableVolume(holdShare.getAvailableVolume() - request.getAmount());
-            holdShare.setProfit(holdShare.getProfit().add(BigDecimal.valueOf((stockRealTimePrice.getCurrentPrice() - holdShare.getBuyPrice().doubleValue()) * request.getAmount())));
-            holdShare.setClearance(holdShare.getAvailableVolume() == 0);
-            holdShare.setSaleTime(new Date());
-            holdSharesMapper.updateById(holdShare);
             Stock stock = stockMapper.selectOne(new LambdaQueryWrapper<Stock>().eq(Stock::getName, stockName));
             stock.setShareholding(false);
             stockMapper.updateById(stock);

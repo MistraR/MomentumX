@@ -52,7 +52,7 @@ public class TradingRecord {
     private BigDecimal profit;
 
     /**
-     * 买入数量
+     * 买入时间
      */
     @TableField(value = "buy_time")
     private Date buyTime;
@@ -76,8 +76,15 @@ public class TradingRecord {
     private Boolean clearance;
 
     /**
-     * 买入数量
+     * 买入时间
      */
     @TableField(value = "sale_time")
     private Date saleTime;
+
+    /**
+     * 卖出价
+     */
+    @TableField(value = "sale_price")
+    private BigDecimal salePrice;
+
 }

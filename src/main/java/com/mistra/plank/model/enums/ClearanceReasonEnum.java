@@ -11,7 +11,9 @@ public enum ClearanceReasonEnum {
      * 清仓原因
      */
     STOP_LOSE("触发止损,自动卖出"),
-    T("做T卖出"),
+    FIRST_PROFIT_SALE("第一个止盈点"),
+    SECOND_PROFIT_SALE("第二个止盈点"),
+    WAVE_TRADING_SALE_T("网格波动T"),
     RATTY_PLANK("炸板,自动卖出"),
     TAKE_PROFIT("触发止盈,自动卖出"),
     UN_PLANK("11点前还未涨停,自动卖出"),

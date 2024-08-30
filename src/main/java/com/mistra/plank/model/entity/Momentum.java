@@ -36,46 +36,16 @@ public class Momentum {
     private Boolean auto;
 
     /**
-     * 是否开启闪崩低吸
+     * 第一个止盈点，默认5个点 5
      */
-    @TableField(value = "flash_crash")
-    private Boolean flashCrash;
+    @TableField(value = "first_profit_sale")
+    private BigDecimal firstProfitSale;
 
     /**
-     * 是否开启-3低吸
+     * 第二个止盈点，默认10个点 10
      */
-    @TableField(value = "ne3")
-    private Boolean ne3;
-
-    /**
-     * 是否开启-6低吸
-     */
-    @TableField(value = "ne6")
-    private Boolean ne6;
-
-    /**
-     * 是否开启-9低吸
-     */
-    @TableField(value = "ne9")
-    private Boolean ne9;
-
-    /**
-     * 做T盈利差额，默认3个点 1.03
-     */
-    @TableField(value = "t_rate")
-    private BigDecimal tRate;
-
-    /**
-     * 第一个减半止盈点，默认5个点 1.05
-     */
-    @TableField(value = "first_profit")
-    private BigDecimal firstProfit;
-
-    /**
-     * 第二个减半止盈点，默认13个点 1.13
-     */
-    @TableField(value = "second_profit")
-    private BigDecimal secondProfit;
+    @TableField(value = "second_profit_sale")
+    private BigDecimal secondProfitSale;
 
     /**
      * 持仓数量
@@ -92,8 +62,8 @@ public class Momentum {
     /**
      * 持仓总额
      */
-    @TableField(value = "total")
-    private BigDecimal total;
+    @TableField(value = "total_money")
+    private BigDecimal totalMoney;
 
     /**
      * 利润总额
@@ -106,5 +76,89 @@ public class Momentum {
      */
     @TableField(value = "profit_rate")
     private BigDecimal profitRate;
+
+    /**
+     * 成本价
+     */
+    @TableField(value = "cost_price")
+    private BigDecimal costPrice;
+
+    /**
+     * 持仓金额上限
+     */
+    @TableField(value = "cost_limit")
+    private BigDecimal costLimit;
+
+    /**
+     * 今日是否触板
+     */
+    @TableField(value = "today_plank")
+    private Boolean todayPlank;
+
+    /**
+     * 是否可以买入
+     */
+    @TableField(value = "buy")
+    private Boolean buy;
+
+    /**
+     * 默认止盈清仓金额
+     */
+    @TableField(value = "profit_limit")
+    private BigDecimal profitLimit;
+
+    /**
+     * 做T波动差，默认3个点 1.03
+     */
+    @TableField(value = "t_rate")
+    private BigDecimal tRate;
+
+    /**
+     * 第1个低吸点,默认-3
+     */
+    @TableField(value = "first_suck_rate")
+    private BigDecimal firstSuckRate;
+
+    /**
+     * 第2个低吸点,默认-6
+     */
+    @TableField(value = "second_suck_rate")
+    private BigDecimal secondSuckRate;
+
+    /**
+     * 第3个低吸点,默认-9
+     */
+    @TableField(value = "third_suck_rate")
+    private BigDecimal thirdSuckRate;
+
+    /**
+     * 特定金额低吸
+     */
+    @TableField(value = "special_suck_price")
+    private BigDecimal specialSuckPrice;
+
+    /**
+     * 是否开启闪崩低吸
+     */
+    @TableField(value = "flash_crash")
+    private Boolean flashCrash;
+
+    /**
+     * 是否采用波动做T
+     */
+    @TableField(value = "wave_trading")
+    private Boolean waveTrading;
+
+    /**
+     * 下一个低吸价格
+     */
+    @TableField(value = "next_suck_price")
+    private BigDecimal nextSuckPrice;
+
+    /**
+     * 下一个卖出价格
+     */
+    @TableField(value = "next_sale_price")
+    private BigDecimal nextSalePrice;
 
 }
